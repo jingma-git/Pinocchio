@@ -1,0 +1,1 @@
+./build/DemoUI data/chebu.off -motion data/walk.txt

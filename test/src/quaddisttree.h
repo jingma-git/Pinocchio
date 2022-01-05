@@ -19,7 +19,6 @@
 #ifndef QUADDISTTREE_H
 #define QUADDISTTREE_H
 
-#include "utils.h"
 #include "hashutils.h"
 #include "dtree.h"
 #include "multilinear.h"
@@ -27,7 +26,6 @@
 #include "pointprojector.h"
 #include <numeric>
 #include <map>
-#include <string.h>
 
 template <int Dim>
 class DistFunction : public Multilinear<double, Dim>
@@ -94,42 +92,60 @@ public:
             doSplit = true;
 
         // condition3: child node
-        // subvided when the distance field within a cell is not well
-        // approximated by multilinear interpolation of its corner values
+        // split if the interpolated distance field of this rect >
         if (!doSplit)
         {
-            // if Dim=2: permute the 3x3 cases, [low,low], [mid, low], ... , [hi, hi]
-            // if Dim=3: permute the 3x3x3 cases, [low,low,low], [mid, low, low],...,[hi, hi, hi]
+            int idx[Dim + 1];
+            for (i = 0; i < Dim + 1; ++i)
+                idx[i] = 0;
             Vector<double, Dim> center = rect.getCenter();
-            const Vector<double, Dim> &lo = rect.getLo();
-            const Vector<double, Dim> &hi = rect.getHi();
-            for (int i = 0; i < grid.num_corners; ++i) // the i_th corner
+            while (idx[Dim] == 0) // have not check the 3rd dimension
             {
                 Vector<double, Dim> cur;
                 bool anyMid = false;
-                // populate cur according to corner_bits, low, center, corner of rect
+                for (i = 0; i < Dim; ++i)
                 {
-                    for (int k = 0; k < Dim; ++k)
+                    // i=0: idx[0]==0, cur[0]=lo[0]
+                    // i=0: idx[0]==1, cur[0]=hi[0]
+                    // i=0: idx[0]==2, cur[0]=center[0], cur=[cent_x, 0, 0]
+                    // [0, 1, 0, 0], cur=[low_x, hi_y, 0]
+                    switch (idx[i])
                     {
-                        int bit = grid.bit(i, k);
-                        cur[k] = (bit == 0) ? lo[k] : (bit == 1 ? hi[k] : center[k]);
-                        if (bit == 2)
-                        {
-                            anyMid = true;
-                        }
+                    case 0:
+                        cur[i] = rect.getLo()[i];
+                        break;
+                    case 1:
+                        cur[i] = rect.getHi()[i];
+                        break;
+                    case 2:
+                        cur[i] = center[i];
+                        anyMid = true;
+                        break;
                     }
                 }
 
-                // evaluate(cur): approximated distance field
-                // eval(cur): exact distance to surface
+                // cur: [cent_x, 0, 0]
                 if (anyMid && fabs(evaluate(cur) - eval(cur)) > tol)
                 {
                     doSplit = true;
                     break;
                 }
+
+                // iter0: i=0, [0, 0, 0, 0]: idx[0]!=2, idx[0]+=1, [1, 0, 0, 0]
+                // iter1: i=0, [1, 0, 0, 0]: idx[0]!=2, idx[0]+=1, [2, 0, 0, 0]
+                // iter2: [2, 0, 0, 0]: idx[1]!=2, idx[1]+=1, [0, 1, 0, 0]
+                for (i = 0; i < Dim + 1; ++i)
+                {
+                    if (idx[i] != 2)
+                    {
+                        idx[i] += 1;
+                        for (--i; i >= 0; --i)
+                            idx[i] = 0;
+                        break;
+                    }
+                }
             }
         }
-
         if (!doSplit)
             return;
 
@@ -146,9 +162,6 @@ public:
     {
         if (node->getChild(0) == NULL)
         {
-            auto w = (v - node->getRect().getLo());
-            auto rSize = node->getRect().getSize();
-            w = w.apply(divides<Real>(), rSize);
             return super::evaluate((v - node->getRect().getLo()).apply(divides<Real>(), node->getRect().getSize()));
         }
         Vector<Real, Dim> center = node->getRect().getCenter();
@@ -180,11 +193,7 @@ public:
 
 private:
     NodeType *node;
-    static const Grid3<Dim> grid;
 };
-
-template <int Dim>
-const Grid3<Dim> DistData<Dim>::grid;
 
 typedef DistData<3>::NodeType OctTreeNode;
 typedef DRootNode<DistData<3>, 3> OctTreeRoot;
@@ -228,6 +237,7 @@ private:
 
         double operator()(const Vector3 &vec) const
         {
+            // if vec[1] and vec[2] swap position, yields the same cur(key)
             unsigned int cur = ROUND(vec[0] * 1023.) + 1024 * (ROUND(vec[1] * 1023.) + 1024 * ROUND(vec[2] * 1023.));
             unsigned int sz = cache.size();
             double &d = cache[cur];
@@ -267,11 +277,6 @@ private:
                 vector<Vector3> isecs = mint.intersect(vec);
                 for (i = 0; i < (int)isecs.size(); ++i)
                 {
-                    // since the view direction is (1, 0, 0),
-                    // all points are projected btw [0, 1]
-                    // this method does not work for multi-components/non-manifold meshes!!!
-                    // for a watertight connected non-manifold mesh, we can test wheter a point
-                    // is inside the component or not through number of intersections
                     if (isecs[i][0] > vec[0])
                         ins = -ins;
                 }
@@ -282,7 +287,7 @@ private:
 
         mutable map<unsigned int, double> cache;
         const ObjectProjector<3, Tri3Object> &proj;
-        Intersector mint; // this intersector is not precise, to construct a precise octree, we need a more precise intersector
+        Intersector mint;
         mutable Rect3 rects[11];
         mutable int inside[11];
         mutable int level; // essentially index of last rect

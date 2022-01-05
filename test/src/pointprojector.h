@@ -67,6 +67,11 @@ public:
             for (i = 0; i < (int)objs.size(); ++i)
                 orders[d].push_back(i);
             sort(orders[d].begin(), orders[d].end(), DLess(d, objs));
+
+            // M_DEBUG("Dim " << d << ": ");
+            // for (int i = 0; i < objs.size(); ++i)
+            //     std::cout << orders[d][i] << " ";
+            // std::cout << std::endl;
         }
 
         rnodes.reserve((int)objs.size() * 2 - 1);
@@ -74,19 +79,18 @@ public:
     }
 
     Vec project(const Vec &from) const
-    {
-        // similar to Kd-Tree, instead of returning closest point of queury point (from), but return
+    { // similar to Kd-Tree, instead of returning closest point to queury point (from), but return
         // query-point's projection to traingle when the object is triangle
         double minDistSq = 1e37;
         Vec closestSoFar;
 
         int sz = 1;
-        static pair<double, int> todo[10000]; // rect_dist_to_surface, node_idx
+        static pair<double, int> todo[10000];
         todo[0] = make_pair(rnodes[0].rect.distSqTo(from), 0);
 
         while (sz > 0)
-        {
-            if (todo[--sz].first > minDistSq) // todo[--sz]: pop out the top element
+        { // ToDO: optimize this to remove todo limit
+            if (todo[--sz].first > minDistSq)
             {
                 continue;
             }
@@ -117,7 +121,7 @@ public:
             }
 
             // leaf -- consider the object
-            Vec curPt = objs[c2].project(from);
+            Vec curPt = objs[c2].project(from); // exact ray traingle intersection
             double distSq = (from - curPt).lengthsq();
             if (distSq <= minDistSq)
             {
@@ -158,7 +162,6 @@ private:
         }
         else
         {
-            // split in curDim
             int i, d;
             vector<int> orders1[Dim], orders2[Dim];
             set<int> left;

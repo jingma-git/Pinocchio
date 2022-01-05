@@ -92,9 +92,9 @@ struct Grid3
         for (int i = 0; i < num_corners; ++i)
         {
             decimalToBits<3>(i, &m[i][0]);
-            // std::cout << i << ": ";
-            // std::copy(&m[i][0], &m[i][0] + Dim, std::ostream_iterator<int>(std::cout, " "));
-            // std::cout << std::endl;
+            std::cout << i << ": ";
+            std::copy(&m[i][0], &m[i][0] + Dim, std::ostream_iterator<int>(std::cout, " "));
+            std::cout << std::endl;
         }
     }
 

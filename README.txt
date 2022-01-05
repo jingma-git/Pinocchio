@@ -1,3 +1,6 @@
+# https://bronsonzgeb.com/index.php/2021/05/22/gpu-mesh-voxelizer-part-1/
+# https://www.blendermarket.com/products/voxel-heat-diffuse-skinning
+
 This is the source release of the Pinocchio library.  The full
 technical description is given in Ilya Baran and Jovan Popovic,
 "Automatic Rigging and Animation of 3D Characters," SIGGRAPH 2007.

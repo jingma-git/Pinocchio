@@ -20,7 +20,6 @@
 #define MESH_H
 
 #include <vector>
-#include <list>
 
 #include "vector.h"
 #include "rect.h"
@@ -43,7 +42,7 @@ struct MeshEdge
     int twin;
 };
 
-class PINOCCHIO_API Mesh
+class Mesh
 {
 public:
     Mesh() : scale(1.) {}

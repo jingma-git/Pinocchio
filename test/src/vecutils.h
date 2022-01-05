@@ -127,12 +127,12 @@ Vector<Real, 3> projToTri(const Vector<Real, 3> &from, const Vector<Real, 3> &p1
         bool s3 = (p3p1 % (from - p3)) * normal <= Real();
 
         if (s2 && s3)
-        { // point inside the triangle
+        {
             if (normal.lengthsq() < tolsq)
                 return p1; // incorrect, but whatever...
 
             double dot = (from - p3) * normal;
-            return from - (dot / normal.lengthsq()) * normal;
+            return from - (dot / normal.lengthsq()) * normal; // inside triangle
         }
         if (!s3 && (s2 || (from - p3) * p3p1 >= Real()))
             return projToSeg(from, p3, p1);
