@@ -112,7 +112,7 @@ vector<Sphere> sampleMedialSurface(TreeType *distanceField, double tol)
     {
         OctTreeNode *cur = queue.front();
         queue.pop_front();
-        std::cout << "iter: " << iter << endl;
+        // std::cout << "iter: " << iter << endl;
         iter++;
         if (cur->getChild(0))
         {
@@ -147,7 +147,7 @@ vector<Sphere> sampleMedialSurface(TreeType *distanceField, double tol)
             }
 
         // pts now contains a grid on 3 of the octree cell faces (that's enough)
-        cout << "pts.size():" << pts.size() << endl;
+        // cout << "pts.size():" << pts.size() << endl;
         for (i = 0; i < (int)pts.size(); ++i)
         {
             Vector3 &p = pts[i];
