@@ -48,6 +48,7 @@ struct ArgData
     bool noFit;
     Skeleton skeleton;
     string skeletonname;
+    string data_dir;
 };
 
 void printUsageAndExit()
@@ -145,6 +146,16 @@ ArgData processArgs(const vector<string> &args)
             out.motionname = args[cur++];
             continue;
         }
+        if (curStr == string("-data_dir"))
+        {
+            if (cur == num)
+            {
+                cout << "No data_dir specified; ignoring." << endl;
+                continue;
+            }
+            out.data_dir = args[cur++];
+            continue;
+        }
         cout << "Unrecognized option: " << curStr << endl;
         printUsageAndExit();
     }
@@ -158,7 +169,8 @@ void process(const vector<string> &args, MyWindow *w)
     ArgData a = processArgs(args);
 
     Debugging::setOutStream(cout);
-    std::string data_dir = "/home/server/MaJing/Dataset/RigNet/data/";
+    std::string data_dir = a.data_dir;
+    cout << "data_dir: " << data_dir << endl;
     std::string meshname = data_dir + "watertight/" + a.filename + ".obj";
     Mesh m(meshname);
     if (m.vertices.size() == 0)

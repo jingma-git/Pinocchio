@@ -5,4 +5,4 @@
 # ./build/DemoUI data/13w_high.obj -motion data/walk.txt
 # ./build/Demo data/13w_high.obj -motion data/walk.txt
 # ./build/Demo 13
-./build/Demo  144
+./build/Demo  144 -data_dir /home/server/MaJing/Dataset/RigNet/data/
