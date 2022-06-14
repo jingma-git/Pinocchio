@@ -11,3 +11,6 @@ file(GLOB src DemoUI/*.cpp)
 add_executable(DemoUI ${src})
 target_link_libraries(DemoUI core fltk fltk_gl GL GLU Xrender Xcursor Xfixes Xft fontconfig Xinerama pthread dl m X11)
 
+file(GLOB src Demo/*.cpp)
+add_executable(Demo ${src})
+target_link_libraries(Demo core fltk fltk_gl GL GLU Xrender Xcursor Xfixes Xft fontconfig Xinerama pthread dl m X11)

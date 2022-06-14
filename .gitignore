@@ -17,6 +17,7 @@ debug/
 build/
 Release/
 release/
+output/
 *.obj
 \#*
 .\#*

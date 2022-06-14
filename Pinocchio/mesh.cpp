@@ -272,11 +272,11 @@ void Mesh::readObj(istream &strm)
         // deal with the line based on the first word
         if (words[0][0] == 'v')
         {
-            if (words.size() != 4)
-            {
-                Debugging::out() << "Error on line " << lineNum << endl;
-                OUT;
-            }
+            // if (words.size() != 4)
+            // {
+            //     Debugging::out() << "Error on line " << lineNum << endl;
+            //     OUT;
+            // }
 
             double x, y, z;
             sscanf(words[1].c_str(), "%lf", &x);
