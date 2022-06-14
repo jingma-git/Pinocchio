@@ -233,10 +233,9 @@ void process(const vector<string> &args, MyWindow *w)
         bs << i << " " << o.embedding[i][0] << " " << o.embedding[i][1] << " " << o.embedding[i][2] << endl;
     }
     bs << "#" << endl;
-    for (int i = 0; i < a.skeleton.fGraph().edges.size(); ++i)
+    for (int i = 0; i < a.skeleton.fPrev().size(); ++i)
     {
-        vector<int> e = a.skeleton.fGraph().edges[i];
-        bs << e[0] + 1 << " " << e[1] + 1 << endl;
+        bs << a.skeleton.fPrev()[i] << " " << i << endl;
     }
     bs << "#" << endl;
 

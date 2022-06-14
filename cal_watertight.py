@@ -33,10 +33,10 @@ if __name__ == "__main__":
     data_dir = "/home/server/MaJing/Dataset/RigNet/data"
     model_list = np.loadtxt(os.path.join(data_dir, "all_final.txt"), dtype=np.int)
 
-    # model_list = [13]
+    model_list = [13]
     for model_id in model_list:
-        if os.path.exists(os.path.join(data_dir, f"watertight/{model_id}.obj")):
-            continue
+        # if os.path.exists(os.path.join(data_dir, f"watertight/{model_id}.obj")):
+        #     continue
         print(model_id)
         obj = o3d.io.read_triangle_mesh(os.path.join(data_dir, f"obj/{model_id}.obj"))
         if len(obj.vertex_normals) == 0:
