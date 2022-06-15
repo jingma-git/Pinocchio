@@ -224,7 +224,7 @@ void process(const vector<string> &args, MyWindow *w)
     //     os << i << " " << o.embedding[i][0] << " " << o.embedding[i][1] << " " << o.embedding[i][2] << " " << a.skeleton.fPrev()[i] << endl;
     // }
 
-    std::string bone_path = data_dir + "pinocchio/" + a.filename + ".tgf";
+    std::string bone_path = data_dir + a.skeletonname + "/" + a.filename + ".tgf";
     ofstream bs(bone_path.c_str());
     for (int i = 0; i < a.skeleton.fGraph().verts.size(); ++i)
     {
