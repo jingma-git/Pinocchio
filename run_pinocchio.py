@@ -7,4 +7,5 @@ model_list = np.loadtxt(os.path.join(data_dir, "test_final.txt"), dtype=np.int32
 for model_id in model_list:
     if os.path.exists(os.path.join(data_dir, f"pinocchio/{model_id}.tgf")):
         continue
+    print(model_id)
     os.system(f'./Demo/Demo {model_id} -data_dir {data_dir}')

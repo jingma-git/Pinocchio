@@ -30,11 +30,11 @@ def upsample(obj):
     return mesh_new
 
 if __name__ == "__main__":
-    # data_dir = "F:/Dataset/RigNetv1"
-    data_dir = "/home/server/MaJing/Dataset/RigNet/data"
-    model_list = np.loadtxt(os.path.join(data_dir, "all_final.txt"), dtype=np.int)
+    data_dir = "F:/Dataset/RigNetv1"
+    # data_dir = "/home/server/MaJing/Dataset/RigNet/data"
+    model_list = np.loadtxt(os.path.join(data_dir, "test_final.txt"), dtype=np.int)
 
-    model_list = [13]
+    model_list = [8333]
     for model_id in model_list:
         # if os.path.exists(os.path.join(data_dir, f"watertight/{model_id}.obj")):
         #     continue
@@ -45,10 +45,10 @@ if __name__ == "__main__":
         pcd = obj.sample_points_poisson_disk(number_of_points=4000)
         mesh, densities = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=8)
 
-        mesh = mesh.remove_degenerate_triangles()
-        mesh = mesh.remove_duplicated_triangles()
-        mesh = mesh.remove_duplicated_vertices()
-        mesh = mesh.remove_unreferenced_vertices()
+        # mesh = mesh.remove_degenerate_triangles()
+        # mesh = mesh.remove_duplicated_triangles()
+        # mesh = mesh.remove_duplicated_vertices()
+        # mesh = mesh.remove_unreferenced_vertices()
 
         triangle_clusters, cluster_n_triangles, cluster_area = mesh.cluster_connected_triangles()
         triangle_clusters = np.asarray(triangle_clusters)
@@ -66,8 +66,8 @@ if __name__ == "__main__":
         mesh1 = mesh1.remove_duplicated_vertices()
         mesh1 = mesh1.remove_unreferenced_vertices()
 
-        # if not mesh.is_watertight():
-        #     print(model_id)
+        if not mesh.is_watertight():
+            print(model_id)
         o3d.io.write_triangle_mesh(os.path.join(data_dir, f"watertight/{model_id}.obj"), mesh1)
     print("done!")
 
