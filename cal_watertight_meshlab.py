@@ -4,7 +4,11 @@ import os
 import pymeshlab
 
 if __name__ == "__main__":
-    data_dir = "F:/Dataset/RigNetv1"
+    # pymeshlab.print_filter_list()
+    # pymeshlab.print_filter_parameter_list('conditional_vertex_selection')
+
+    # data_dir = "F:/Dataset/RigNetv1"
+    data_dir = "D:/Dataset/AutoRS"
     model_list = np.loadtxt(os.path.join(data_dir, "test_final.txt"), dtype=np.int)
 
     # for model_id in model_list:
@@ -16,7 +20,9 @@ if __name__ == "__main__":
     #     ms.load_new_mesh(os.path.join(data_dir, f"obj/{model_id}.obj"))
     #     ms.re_compute_vertex_normals()
     #     ms.poisson_disk_sampling(samplenum=4000)
-    #     ms.surface_reconstruction_screened_poisson()
+    #     ms.apply_filter('conditional_vertex_selection', condselect='(nx==0)&&(ny==0)&&(nz==0)')
+    #     ms.delete_selected_vertices()
+    #     ms.surface_reconstruction_screened_poisson(pre_clean=True)
     #     ms.save_current_mesh(out_path)
 
     for model_id in model_list:

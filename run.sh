@@ -8,4 +8,5 @@
 # ./build/Demo  144 -data_dir /home/server/MaJing/Dataset/RigNet/data/
 # ./build/Demo 4518 -data_dir /home/server/MaJing/Dataset/RigNet/data/
 # ./build/Demo 13 -data_dir /home/server/MaJing/Dataset/RigNet/data/
-./Demo/Demo 1333 -data_dir /mnt/f/Dataset/RigNetv1/
+# ./Demo/Demo 1333 -data_dir /mnt/f/Dataset/RigNetv1/
+./build/Demo 1294 -data_dir /mnt/f/Dataset/RigNetv1/ -skel human
