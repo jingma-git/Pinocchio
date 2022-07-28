@@ -182,7 +182,7 @@ void process(const vector<string> &args, MyWindow *w)
 
     for (i = 0; i < (int)m.vertices.size(); ++i)
         m.vertices[i].pos = a.meshTransform * m.vertices[i].pos;
-    m.normalizeBoundingBox();
+    // m.normalizeBoundingBox();
     m.computeVertexNormals();
 
     Skeleton given = a.skeleton;
@@ -215,8 +215,8 @@ void process(const vector<string> &args, MyWindow *w)
     }
 
     // output skeleton embedding
-    for (i = 0; i < (int)o.embedding.size(); ++i)
-        o.embedding[i] = (o.embedding[i] - m.toAdd) / m.scale;
+    // for (i = 0; i < (int)o.embedding.size(); ++i)
+    //     o.embedding[i] = (o.embedding[i] - m.toAdd) / m.scale;
 
     // ofstream os("skeleton.out");
     // for (i = 0; i < (int)o.embedding.size(); ++i)
